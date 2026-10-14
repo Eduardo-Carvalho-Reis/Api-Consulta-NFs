@@ -1,0 +1,7 @@
+{
+  "package": "@alexssmusica/node-pdf-nfe",
+  "version": "1.3.1",
+  "file": "lib/application/helpers/generate-pdf/nfe/get-transporte.js",
+  "before": "value: ModFrete(transp.modFrete),\n        x: 164,\n        y: y + 17.5,\n        largura: 100,\n        ajusteX,\n        ajusteY,\n        doc,\n        margemEsquerda,\n        margemTopo,\n        tamanho: 8.4",
+  "after": "value: ModFrete(transp.modFrete),\n        x: 171.5,\n        y: y + 17.5,\n        largura: 85,\n        ajusteX,\n        ajusteY,\n        doc,\n        margemEsquerda,\n        margemTopo,\n        tamanho: 7"
+}

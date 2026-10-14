@@ -1,0 +1,15 @@
+node_modules/
+.env
+.env.*
+!.env.example
+*.pfx
+*.p12
+*.pem
+*.key
+*.crt
+storage/
+notas-fiscais/
+.tmp/
+coverage/
+*.log
+certificados/

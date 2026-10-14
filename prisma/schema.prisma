@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Empresa {
+  id                   String   @id @default(uuid()) @db.Uuid
+  cnpj                 String   @unique @db.VarChar(14)
+  nome                 String   @db.VarChar(120)
+  pasta                String   @unique @db.VarChar(160)
+  pastaNormalizada     String   @unique @db.VarChar(160)
+  ambiente             String   @db.VarChar(1)
+  ufAutor              String   @db.VarChar(2)
+  certificadoPathEnv   String   @db.VarChar(100)
+  certificadoSenhaEnv  String   @db.VarChar(100)
+  ativa                Boolean  @default(false)
+  ultimaSincronizacao  DateTime?
+  criadoEm             DateTime @default(now())
+  notas                NotaFiscal[]
+  controle             ControleDistribuicao?
+  sincronizacoes       HistoricoSincronizacao[]
+  documentos           DocumentoDistribuido[]
+}
+
+model NotaFiscal {
+  id                     String   @id @default(uuid()) @db.Uuid
+  empresaId              String   @db.Uuid
+  empresa                Empresa  @relation(fields: [empresaId], references: [id])
+  chaveAcesso            String   @db.VarChar(44)
+  cnpjEmitente           String?  @db.VarChar(14)
+  cpfEmitente            String?  @db.VarChar(11)
+  cnpjDestinatario        String?  @db.VarChar(14)
+  numero                 String?  @db.VarChar(9)
+  serie                  String?  @db.VarChar(3)
+  dataEmissao            DateTime?
+  emissaoOriginal        String?  @db.VarChar(35)
+  valorTotal             Decimal? @db.Decimal(15, 2)
+  statusDocumento        String   @default("RESUMO") @db.VarChar(30)
+  statusImportacao        String   @default("RESUMO") @db.VarChar(30)
+  caminhoXml             String?  @unique
+  caminhoDanfe           String?  @unique
+  hashXml                String?  @db.VarChar(64)
+  hashDanfe              String?  @db.VarChar(64)
+  nsu                    String?  @db.VarChar(15)
+  mensagemErro           String?
+  dataRecebimento        DateTime @default(now())
+  dataUltimaAtualizacao  DateTime @updatedAt
+
+  @@unique([empresaId, chaveAcesso])
+  @@index([empresaId, dataEmissao, id])
+  @@index([empresaId, cnpjEmitente])
+  @@index([empresaId, numero])
+  @@index([empresaId, statusImportacao])
+}
+
+model ControleDistribuicao {
+  id               String   @id @default(uuid()) @db.Uuid
+  empresaId        String   @unique @db.Uuid
+  empresa          Empresa  @relation(fields: [empresaId], references: [id])
+  ultimoNsu        String   @default("000000000000000") @db.VarChar(15)
+  maiorNsu         String   @default("000000000000000") @db.VarChar(15)
+  ultimaConsulta   DateTime?
+  proximaConsulta  DateTime?
+  status           String   @default("PRONTO") @db.VarChar(30)
+  cStat            String?  @db.VarChar(3)
+  falhasSeguidas   Int      @default(0)
+  mensagemErro     String?
+  respostaPendente String?
+  hashResposta     String?  @db.VarChar(64)
+  nsuInformadoSefaz String? @db.VarChar(15)
+}
+
+model HistoricoSincronizacao {
+  id                               String   @id @default(uuid()) @db.Uuid
+  empresaId                        String   @db.Uuid
+  empresa                          Empresa  @relation(fields: [empresaId], references: [id])
+  origem                           String   @default("MANUAL") @db.VarChar(15)
+  dataInicio                       DateTime @default(now())
+  dataFim                          DateTime?
+  status                           String   @default("PENDENTE") @db.VarChar(30)
+  quantidadeDocumentosEncontrados  Int      @default(0)
+  quantidadeXmlsArmazenados         Int      @default(0)
+  quantidadeErros                  Int      @default(0)
+  mensagemErro                     String?
+  cStat                            String?  @db.VarChar(3)
+
+  @@index([empresaId, dataInicio])
+  @@index([status, dataInicio])
+}
+
+model DocumentoDistribuido {
+  id           String   @id @default(uuid()) @db.Uuid
+  empresaId    String   @db.Uuid
+  empresa      Empresa  @relation(fields: [empresaId], references: [id])
+  nsu          String?  @db.VarChar(15)
+  identificador String
+  schema       String   @db.VarChar(100)
+  tipo         String   @db.VarChar(30)
+  chaveAcesso  String?  @db.VarChar(44)
+  caminho      String
+  hash         String   @db.VarChar(64)
+  mensagemErro String?
+  recebidoEm   DateTime @default(now())
+
+  @@unique([empresaId, nsu])
+  @@unique([empresaId, identificador])
+  @@index([empresaId, chaveAcesso])
+}

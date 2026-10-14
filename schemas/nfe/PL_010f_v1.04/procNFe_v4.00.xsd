@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Entry point for the unmodified TNfeProc type supplied in the official package. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.portalfiscal.inf.br/nfe" targetNamespace="http://www.portalfiscal.inf.br/nfe" elementFormDefault="qualified">
+  <xs:include schemaLocation="leiauteNFe_v4.00.xsd"/>
+  <xs:element name="nfeProc" type="TNfeProc"/>
+</xs:schema>

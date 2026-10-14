@@ -1,0 +1,166 @@
+{
+  "info": {
+    "name": "API NF-e - acesso por empresa",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Configure token localmente. Nenhuma credencial real incluída."
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:3000"
+    },
+    {
+      "key": "cnpj",
+      "value": ""
+    },
+    {
+      "key": "chave",
+      "value": ""
+    },
+    {
+      "key": "execucaoId",
+      "value": ""
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Sincronizar",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-Empresa-CNPJ",
+            "value": "{{cnpj}}"
+          }
+        ],
+        "url": "{{baseUrl}}/api/notas/sincronizar"
+      }
+    },
+    {
+      "name": "Listar notas",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-Empresa-CNPJ",
+            "value": "{{cnpj}}"
+          }
+        ],
+        "url": "{{baseUrl}}/api/notas?pagina=1&limite=20&ordem=desc"
+      }
+    },
+    {
+      "name": "Status",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-Empresa-CNPJ",
+            "value": "{{cnpj}}"
+          }
+        ],
+        "url": "{{baseUrl}}/api/notas/status"
+      }
+    },
+    {
+      "name": "Historico",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-Empresa-CNPJ",
+            "value": "{{cnpj}}"
+          }
+        ],
+        "url": "{{baseUrl}}/api/notas/sincronizacoes?pagina=1&limite=20"
+      }
+    },
+    {
+      "name": "Consultar execução pelo identificador",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "X-Empresa-CNPJ", "value": "{{cnpj}}" }],
+        "url": "{{baseUrl}}/api/notas/sincronizacoes/{{execucaoId}}"
+      }
+    },
+    {
+      "name": "Consultar nota",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-Empresa-CNPJ",
+            "value": "{{cnpj}}"
+          }
+        ],
+        "url": "{{baseUrl}}/api/notas/{{chave}}"
+      }
+    },
+    {
+      "name": "Download XML",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-Empresa-CNPJ",
+            "value": "{{cnpj}}"
+          }
+        ],
+        "url": "{{baseUrl}}/api/notas/{{chave}}/xml"
+      }
+    },
+    {
+      "name": "Download DANFE",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-Empresa-CNPJ",
+            "value": "{{cnpj}}"
+          }
+        ],
+        "url": "{{baseUrl}}/api/notas/{{chave}}/danfe"
+      }
+    },
+    {
+      "name": "Gerar ou regenerar DANFE",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-Empresa-CNPJ",
+            "value": "{{cnpj}}"
+          }
+        ],
+        "url": "{{baseUrl}}/api/notas/{{chave}}/danfe"
+      }
+    },
+    {
+      "name": "Empresas autorizadas",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-Empresa-CNPJ",
+            "value": "{{cnpj}}"
+          }
+        ],
+        "url": "{{baseUrl}}/api/empresas"
+      }
+    }
+  ]
+}
